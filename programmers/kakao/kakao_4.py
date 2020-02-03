@@ -9,7 +9,6 @@ def count_leaf(tmp_trie, depth):
 
         if depth == 0 and k == '@@@':
             cnt += 1
-            #print(tmp_trie)
             continue
 
         if depth > 0 and k != '@@@':
@@ -17,7 +16,7 @@ def count_leaf(tmp_trie, depth):
 
     return cnt
 
-def solution(words, queries):
+def solutionx(words, queries):
     answer = []
 
     fow_trie = {}
@@ -253,4 +252,4 @@ def solution(words, queries):
 #         return temp
 
 if __name__ == '__main__':
-    solution(["frodo", "front", "frost", "frozen", "frame", "kakao"], ["fro??", "????o", "fr???", "fro???", "pro?"])
+    solutionx(["frodo", "front", "frost", "frozen", "frame", "kakao"], ["fro??", "????o", "fr???", "fro???", "pro?"])
