@@ -94,7 +94,7 @@ def solution2(n, weak, dist):
         d = dist[i]
         for _ in range(len(q)):
             current = q.popleft()
-            print(f"current: {current}, d: {d}")
+            # print(f"current: {current}, d: {d}")
             for p in current:
                 l = p
                 r = (p + d) % n
@@ -103,19 +103,17 @@ def solution2(n, weak, dist):
                     temp = tuple(filter(lambda x: x < l or x > r, current))
                 else:
                     temp = tuple(filter(lambda x: x < l and x > r, current))
-                print(f"temp: {temp}")
                 x = tuple([m for m in current if m not in temp])
-                print(f"x: {x}")
                 if len(temp) == 0:
-                    print(f"----------- visited: {visited}, i+1: {i+1}, q: {q} --------------")
+                    # print(f"----------- visited: {visited}, i+1: {i+1}, q: {q} --------------")
                     return (i + 1)
                 # elif temp not in visited:
                 elif x not in visited:
                     # visited.add(temp)
                     visited.add(tuple(x))
                     q.append(list(temp))
-                print("d: ", d, "q: ", q, "visited: ", visited)
-            print("current loop result -> visited: ", visited, "q: ", q)
+            #     print("d: ", d, "q: ", q, "visited: ", visited)
+            # print("current loop result -> visited: ", visited, "q: ", q)
     return -1
 
 if __name__ == '__main__':
