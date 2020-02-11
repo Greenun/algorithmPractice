@@ -38,4 +38,34 @@ def check(current, row, col):
             return False
     return True
             
+
+# recursive ver
+
+def solution(n):
+    current = list()
+    count = 0
+    temp, count = backtrack(n, current, 0)
+    
+    return count
+
+def backtrack(n, current, row):
+    if row == n:        
+        current.pop()
+        return current, 1
+    count = 0
+    for col in range(n):
+        if check(current, row, col):
+            current.append(col)
+            current, c = backtrack(n, current, row + 1)
+            count += c
+    if len(current) == 0:
+        return current, count
+    current.pop()
+    return current, count
+
+def check(current, row, col):
+    for i, c in enumerate(current):
+        if c == col or (c + row - i) == col or (c - row + i ) == col:
+            return False
+    return True
             
