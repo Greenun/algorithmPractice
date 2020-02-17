@@ -26,7 +26,7 @@ def solution(n, cores):
                 t, core = working_queue[0]
 
 # parametric search
-# 더 알아볼 필요가 있음.
+# binary search end 지점 파악 중요.
 def solution(n, cores):
     init = len(cores)
     # a_t = init + [for all t // cores]
@@ -43,7 +43,7 @@ def solution(n, cores):
     target = low
     a_t = init + sum([target // core for core in cores])
     enable = [idx for idx, core in enumerate(cores) if target % core == 0]
-    a_t -= len(enable)
+    a_t -= len(enable) # a_t 는 enable을 추가하기 이전의 값
     while a_t >= n:
         # print(enable, target, a_t, n)
         target -= 1
