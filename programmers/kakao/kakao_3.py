@@ -84,3 +84,95 @@ def solution(key, lock):
             key_hole[i] = (M - p[1] - 1, p[0])
 
     return False
+
+# 내 풀이 였던 것
+def solution(key, lock):
+    answer = False
+    rot90 = rotate(key)
+    rot180 = rotate(rot90)
+    rot270 = rotate(rot180)
+    x1 = match(key, lock)
+    x2 = match(rot90, lock)
+    x3 = match(rot180, lock)
+    x4 = match(rot270, lock)
+    answer = x1 or x2 or x3 or x4
+    # print("key: ",key)
+    # print("rot90: ", rot90)
+    # print("rot180: ", rot180)
+    # print("rot270: ", rot270)
+    
+    return answer
+
+# def get_four_points(matrix):
+#     t = 0
+#     for i in range(len(matrix)):
+#         for j in matrix[i]:
+#             if j == t:
+#                 top = (i, matrix[i].index(j))
+#     for i in range(len(matrix)-1, -1, -1):
+#         for j in matrix[i]:
+#             if j == t:
+#                 bottom = (i, matrix[i].index(j))
+#     for i in range(len(matrix)):
+#         for j in range(len(matrix)):
+#             if matrix[j][i] == t:
+#                 left = (i, j)
+#     for i in range(len(matrix)-1, -1, -1):
+#         for j in range(len(matrix)-1, -1, -1):
+#             if matrix[j][i] == t:
+#                 right = (i, j)
+#     return top, bottom, left, right
+
+def match(key, lock):
+    n = len(lock)
+    import copy
+    extended_lock = []
+    for i in range(3*n):
+        temp = copy.deepcopy([0]*(3*n))
+        extended_lock.append(temp)
+    # init
+    for i, row in enumerate(lock):
+        for j in range(n):
+            extended_lock[n+i][n+j] += row[j]
+    m = len(key)
+    result = False
+    for i in range(n-m+1, 2*n):
+        for j in range(n-m+1, 2*n):
+            result = add_check(copy.deepcopy(extended_lock), key, n, m, i, j)
+            # print("i,j,result: ",i, j, result)
+            if result: return True
+    return result
+    
+            
+def add_check(ext_lock, key, n, m, s1, s2):
+    for i in range(0, m):
+        for j in range(0, m):
+            ext_lock[s1+i][s2+j] += key[i][j]
+    # n,n ~ 2n-1, 2n-1
+    is_match = False
+    for i in range(n, 2*n):
+        for j in range(n, 2*n):
+            # print(i, j)
+            if not ext_lock[i][j] == 1:
+                # is_match = False
+                # break
+                # print("lock: ", ext_lock)
+                return False
+            else:
+                is_match = True
+    # print(is_match, ext_lock)
+    # print("true???: ", is_match)
+    return is_match
+                
+            
+    
+def rotate(key):
+    # rot90 left
+    import copy
+    temp = copy.deepcopy(key)
+    for idx, k in enumerate(key):
+        for i in range(len(k)):
+            t = copy.deepcopy(k)
+            t.reverse()
+            temp[i][idx] = t[i]
+    return temp
