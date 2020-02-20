@@ -52,4 +52,29 @@ def solution(N, road, K):
             if not current in visited:
                 break
     return len([town for town in table if table[town] <= K])
+
+# 우선순위 큐(heap) 다익스트라 (더 빠름)
+def solution(N, road, K):
+    from collections import defaultdict
+    import heapq
+    maps = defaultdict(set)
+    table = dict()
+    table[1] = 0
+    for i in range(1, N):
+        table[i+1] = 500100
+    for st, ed, t in road:
+        maps[st].add((ed, t))
+        maps[ed].add((st, t))
+    pqueue = list()
+    for node in table:
+        heapq.heappush(pqueue, (table[node], node))
+    while pqueue:
+        ct, current = heapq.heappop(pqueue)
+        if ct <= table[current]:
+            for neighbor, t in maps[current]:
+                if table[neighbor] >= ct + t:
+                    table[neighbor] = ct + t
+                    heapq.heappush(pqueue, (table[neighbor], neighbor))
+    
+    return len([town for town in table if table[town] <= K])
         
