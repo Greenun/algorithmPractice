@@ -1,21 +1,25 @@
 from itertools import permutations, combinations
 
+# 내 풀이 (작성이 오래걸림)
 def solution(n, weak, dist):
-    answer = 0 
+    from itertools import permutations
     dist = [d + 1 for d in dist]
-    for i in range(1, len(dist)+1):        
-        for p in permutations(dist, i):
-            if travel(p, weak, n):
-                return i
-    
-    return -1
+    dist.sort(reverse=True)
+    mins = 10
+    for dist_perm in permutations(dist):
+        res = travel(dist_perm, weak, n)
+        mins = res if mins > res else mins
+    if mins < 9:
+        return mins
+    else:
+        return -1
 
 def travel(dist_perm, weak, n):
-    l = len(dist_perm)
-    for pattern in generate_weaks(n, weak):
+    minimum = 10
+    for pattern in generate_pattern(weak):
         result = 0
         i = 0
-        for d in dist_perm:
+        for idx, d in enumerate(dist_perm):
             if i >= len(pattern): break
             g = pattern[i]
             bits = build_bits(n, d, g)
@@ -23,63 +27,20 @@ def travel(dist_perm, weak, n):
             while result & (1 << g) != 0:
                 i += 1
                 if i >= len(pattern):
-                    return True
+                    minimum = idx + 1 if minimum > idx + 1 else minimum
+                    break
                 g = pattern[i]
-    return False
-#     for points in combinations(weak, l):
-#         for j in range(2**l):
-#             temp = []
-#             result = 0
-#             swap_bits = '{0:b}'.format(j).zfill(l)
-#             for idx, d in enumerate(dist_perm):
-#                 temp.append(build_bits(n, d, points[idx], swap_bits[idx]))
-                
-#             for t in temp:
-#                 result |= t
-#             # if dist_perm == (3,6,8) or dist_perm == (4,6,8):
-#             #     print("points, temp: ", points, temp)
-#             #     print(f"{dist_perm}", "{0:b}".format(result).zfill(n))    
-#             # if temp == [28, 33030144, 130560]:
-#             #     print('result: ','{0:b}'.format(result).zfill(n))
-#             #     print('goal:', '{0:b}'.format(goal).zfill(n))
-#             if check_goal(result, goal):
-#                 return True
-    # return False
+    return minimum
 
-def build_bits(n, d, w, swap='0'):
+def build_bits(n, d, w):
     if w + d > n - 1:
-        # e.g., 110000 (2, 5) --> 100001 2, 5, 6
-        # n - w # left
-        # w + d - n # right
         return (((2**(n-w) - 1) << w) | (2**(w+d-n) - 1))    
     else:
         return (2**d - 1) << w
-#     if swap == '0':
-#         # left
-#         if w + d > n - 1:
-#             # e.g., 110000 (2, 5) --> 100001 2, 5, 6
-#             # n - w # left
-#             # w + d - n # right
-#             return (((2**(n-w) - 1) << w) | (2**(w+d-n) - 1))
-            
-#         else:
-#             return (2**d - 1) << w
-#     else:
-#         # right
-#         if w - d < 0:
-#             # e.g., 000011 (2, 1) --> 100001
-#             # d - w - 1 # left
-#             # w + 1 # right
-#             return ((2**(d-w-1) - 1) << n - d + w | (2**(w+1) - 1))
-#         else:
-#             return (2**d - 1) << w - d + 1
 
-def generate_weaks(n, weak):
-    for i in range(len(weak)):
-        yield weak[i:] + weak[:i]
-        
-# def check_goal(target, goal):
-#     return (target & goal) == goal
+def generate_pattern(origin):
+    for i in range(len(origin)):
+        yield origin[i:] + origin[:i]
 
 from collections import deque
 
@@ -94,7 +55,6 @@ def solution2(n, weak, dist):
         d = dist[i]
         for _ in range(len(q)):
             current = q.popleft()
-            # print(f"current: {current}, d: {d}")
             for p in current:
                 l = p
                 r = (p + d) % n
@@ -105,7 +65,6 @@ def solution2(n, weak, dist):
                     temp = tuple(filter(lambda x: x < l and x > r, current))
                 x = tuple([m for m in current if m not in temp])
                 if len(temp) == 0:
-                    # print(f"----------- visited: {visited}, i+1: {i+1}, q: {q} --------------")
                     return (i + 1)
                 # elif temp not in visited:
                 elif x not in visited:
@@ -114,6 +73,35 @@ def solution2(n, weak, dist):
                     q.append(list(temp))
             #     print("d: ", d, "q: ", q, "visited: ", visited)
             # print("current loop result -> visited: ", visited, "q: ", q)
+    return -1
+
+# list로 할 경우 시간초과
+def solution(n, weak, dist):
+    dist.sort(reverse=True)
+    # queue = list()
+    # queue.append(weak[:])
+    queue = set()
+    queue.add(tuple(weak[:]))
+    visited = set()
+    for i, d in enumerate(dist):
+        if d >= n: return 1
+        copies = set(queue)
+        for _ in range(len(queue)):
+            # current = queue.pop(0)
+            current = copies.pop()
+            for c in current:                
+                st, ed = c, (c + d) % n
+                temp = current[:]
+                visited.add((st, ed))
+                if st < ed:
+                    temp = [t for t in temp if t < st or t > ed]
+                else:
+                    temp = [t for t in temp if t > ed and t < st]
+                if not temp:
+                    return i + 1
+                # if temp not in queue:
+                #     queue.append(temp)
+                queue.add(tuple(temp))
     return -1
 
 if __name__ == '__main__':
