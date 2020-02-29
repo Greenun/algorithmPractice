@@ -10,8 +10,9 @@ def solution(n, times):
             lower = middle + 1
         else:
             upper = middle
-    done = sum([(lower // t) for t in times])
-    while done < n:
-        lower += 1
-        done = sum([(lower // t) for t in times])
+    # 이 부분 없어도 테스트 통과
+    # done = sum([(lower // t) for t in times])
+    # while done < n:
+    #     lower += 1
+    #     done = sum([(lower // t) for t in times])
     return lower
