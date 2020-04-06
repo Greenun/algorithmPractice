@@ -16,8 +16,9 @@ def solution(road, n):
 		zeros.append(zc)
 	if oc:
 		ones.append(oc)
-	print(ones, zeros)
+	# print(ones, zeros)
 	possible = list()
+	flag = True if road.startswith('1') else False
 	if sum(zeros) <= n:
 		return len(road)
 	for i in range(len(zeros)):
@@ -33,23 +34,37 @@ def solution(road, n):
 				break
 			else:
 				temp -= zeros[j]
-	flag = True if road.startswith('1') else False
+	# print(possible)
+	max_sum = 0
 	for p in possible:
-		print("p: ", possible)
-		if flag:
-			pass
-			# idx = [x for x in p]
-			# idx.append(p[-1] + 1)
-			# 0 1 --> 0 (1) 2 (3) 4
-		else:
-			pass
-			# idx = [x - 1 for x in p if not x == 0]
-		# print("idx: ", idx)
-	
+		indices = set()
+		_sum = 0
+		for e in p:
+			new_set = {e, e + 1} if flag else {e - 1, e}
+			indices = indices.union(new_set)
+		
+		for i in indices:
+			if i < 0 or i >= len(ones):
+				continue
+			_sum += ones[i]
+		_sum += n
+		# print(f"sum : {_sum}")
+		if max_sum < _sum:
+			max_sum = _sum
+	return max_sum
+		
+	# case
+	# 0 .. 1 .. 0 : zeros - ones = 1
+	#    i1 - 1 ~ in + 1 
+	# 1 .. ?(0 or 1) .. 1 : zeros - ones = -1
+	#    i1 ~ in + 1
+	# 0 .. ? .. 1 : zeros - ones = 0
+	# 1 .. ? .. 0 : zeros - ones = 0
 
 if __name__ == '__main__':
 	print(solution("111011110011111011111100011111", 3))
 	print(solution("001100", 5))
+	print(solution("001110111100", 3)) # 10
 	print(solution("0011110111110001111111", 3)) # 15
 	print(solution("0011110111110001111111", 4)) # 20
-	print(solution("1111011111110011101111111", 2)) # 10
+	print(solution("1111011111110011101111110", 2)) # 10
