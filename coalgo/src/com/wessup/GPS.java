@@ -4,12 +4,12 @@ import java.util.*;
 
 class Solution {
 
-    public static void main(String[] args) {
-        Solution s = new Solution();
-        int[][] a = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4}, {3, 5}, {4, 6}, {5, 6}, {5, 7}, {6, 7}};
-        int[] g = {1,2,3,3,6,7};
-        s.solution(7, 10, a, 6, g);
-    }
+//    public static void main(String[] args) {
+//        Solution s = new Solution();
+//        int[][] a = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4}, {3, 5}, {4, 6}, {5, 6}, {5, 7}, {6, 7}};
+//        int[] g = {1,2,3,3,6,7};
+//        s.solution(7, 10, a, 6, g);
+//    }
 
     public int solution(int n, int m, int[][] edge_list, int k, int[] gps_log) {
         int[][] dp = new int[k][n];
