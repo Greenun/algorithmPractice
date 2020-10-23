@@ -2,10 +2,10 @@ package com.wessup;
 
 import java.util.*;
 
-class Solution {
+class GPS {
 
 //    public static void main(String[] args) {
-//        Solution s = new Solution();
+//        GPS s = new GPS();
 //        int[][] a = {{1, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 4}, {3, 5}, {4, 6}, {5, 6}, {5, 7}, {6, 7}};
 //        int[] g = {1,2,3,3,6,7};
 //        s.solution(7, 10, a, 6, g);
